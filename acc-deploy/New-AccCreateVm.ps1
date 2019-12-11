@@ -30,7 +30,7 @@ param(
     [string]$ResourceGroupName,
 
     [Parameter(Mandatory=$true)]
-    [ValidateSet("canonical-18.04", "windows-server-2016", "windows-server-2019")]
+    [ValidateSet("canonical-18.04", "canonical-16.04", "rhel-8.0", "windows-server-2016", "windows-server-2019")]
     [string]$AccImage,
 
     [Parameter(Mandatory=$false)]
@@ -73,24 +73,40 @@ $ImgVersion = "latest"
 
 if($AccImage -eq "canonical-18.04")
 {
-	$PublisherName = "Canonical"
-	$Offer = "UbuntuServer"
+    $PublisherName = "Canonical"
+    $Offer = "UbuntuServer"
     $Sku = "18.04-LTS"
-	$ImageOsType = $LinuxString
+    $ImageOsType = $LinuxString
+    $NsgRule = $NsgRuleLinux
+}
+elseif($AccImage -eq "canonical-16.04")
+{
+    $PublisherName = "Canonical"
+    $Offer = "UbuntuServer"
+    $Sku = "16.04-LTS"
+    $ImageOsType = $LinuxString
+    $NsgRule = $NsgRuleLinux
+}
+elseif($AccImage -eq "rhel-8.0")
+{
+    $PublisherName = "RedHat"
+    $Offer = "RHEL"
+    $Sku = "8-gen2"
+    $ImageOsType = $LinuxString
     $NsgRule = $NsgRuleLinux
 }
 elseif ($AccImage -eq "windows-server-2016") {
-	$PublisherName = "MicrosoftWindowsServer"
-	$Offer = "WindowsServer"
+    $PublisherName = "MicrosoftWindowsServer"
+    $Offer = "WindowsServer"
     $Sku = "2016-datacenter-gensecond"
-	$ImageOsType = $WindowsString
+    $ImageOsType = $WindowsString
     $NsgRule = $NsgRuleWindows
 }
 elseif ($AccImage -eq "windows-server-2019") {
-	$PublisherName = "MicrosoftWindowsServer"
-	$Offer = "WindowsServer"
+    $PublisherName = "MicrosoftWindowsServer"
+    $Offer = "WindowsServer"
     $Sku = "2019-datacenter-gensecond"
-	$ImageOsType = $WindowsString
+    $ImageOsType = $WindowsString
     $NsgRule = $NsgRuleWindows
 }
 else
@@ -193,7 +209,7 @@ if($ImageOsType -eq $LinuxString)
     else
     {
         $Vm_Object = az vm create --name $VMName --resource-group $ResourceGroupName --size $VmSize --admin-username $VmUserName --admin-password $VmPassword --image $ImageUrn --location $Location --nsg-rule $NsgRule -ssh-key-value $publickeyfilepath --authentication-type $all | ConvertFrom-Json
-    }	
+    }    
     $UseSSHKeysForAuth = $true
 }
 elseif ($ImageOsType -eq $WindowsString)

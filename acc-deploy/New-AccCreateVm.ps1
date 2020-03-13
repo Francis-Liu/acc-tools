@@ -34,7 +34,7 @@ param(
     [string]$AccImage,
 
     [Parameter(Mandatory=$false)]
-    [ValidateSet("eastus", "westeurope")]
+    [ValidateSet("eastus", "westeurope","uksouth")]
     [string]$Location = "westeurope",
 
     [Parameter(Mandatory=$true)]
@@ -47,8 +47,8 @@ param(
     [string]$VmPassword,
 
     [Parameter(Mandatory=$false)] 
-    [ValidateSet("Standard_DC2s", "Standard_DC3s" )]
-    [string]$VmSize = "Standard_DC2s"
+    [ValidateSet("Standard_DC2s_v2", "Standard_DC4s_v2", "Standard_DC8s_v2" )]
+    [string]$VmSize = "Standard_DC2s_v2"
     )
 
 . $PSScriptRoot\Utils.ps1
@@ -75,7 +75,7 @@ if($AccImage -eq "canonical-18.04")
 {
     $PublisherName = "Canonical"
     $Offer = "UbuntuServer"
-    $Sku = "18.04-LTS"
+    $Sku = "18_04-LTS-gen2"
     $ImageOsType = $LinuxString
     $NsgRule = $NsgRuleLinux
 }
@@ -83,7 +83,7 @@ elseif($AccImage -eq "canonical-16.04")
 {
     $PublisherName = "Canonical"
     $Offer = "UbuntuServer"
-    $Sku = "16.04-LTS"
+    $Sku = "16_04-LTS-gen2"
     $ImageOsType = $LinuxString
     $NsgRule = $NsgRuleLinux
 }
